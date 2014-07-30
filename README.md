@@ -18,6 +18,12 @@ If something should never happen, do this (perhaps in the main 'catch' block)
 Docnet\MATT::expect('Some horrible error')->never()->email('bill@microsoft.com');
 ```
 
+### No set-up required ###
+
+You don't need to go and set up monitors in a web interface or anything. The first time you make a call (as above) the server will start watching.
+
+You'll get a single set up message too, on first call for a unique event reference.
+
 ### Named recipients ###
 
 You can used named targets and groups that have been set up too, so in this example 'support' means several people
