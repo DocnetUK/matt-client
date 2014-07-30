@@ -13,6 +13,12 @@ class MATT
 {
 
     /**
+     * Strings that should never change!
+     */
+    const NO_APP_ID = 'no-app-id';
+    const CANCEL = 'cancel';
+
+    /**
      * Sent yet? We only want to do this once!
      *
      * @var bool
@@ -130,7 +136,7 @@ class MATT
      */
     public function cancel()
     {
-        $this->str_every = 'cancel';
+        $this->str_every = self::CANCEL;
         return $this;
     }
 
@@ -170,7 +176,7 @@ class MATT
         $arr_data = array(
             'datatype' => 'auto-matt',
             'host' => $this->str_source,
-            'app' => defined('DOCNET_APP_ID') ? DOCNET_APP_ID : 'unknown',
+            'app' => defined('DOCNET_APP_ID') ? DOCNET_APP_ID : self::NO_APP_ID,
             'event' => $this->str_event,
             'time' => time(),
             'every' => $this->str_every,
