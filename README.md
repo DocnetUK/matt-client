@@ -6,13 +6,13 @@ One thing that is often overlooked when writing crons and other regular processe
 
 ## Getting Started ##
 
-When you need to know if some regular process stops working, do this
+When you need to know if some regular process stops working, do something like this at the end of your script (when you know the job is done to satisfaction)
 
 ```php
 Docnet\MATT::expect('My cron finished OK')->every('15m')->sms('07777123456');
 ```
 
-If something should never happen, do this
+If something should never happen, do this (perhaps in the main 'catch' block)
 
 ```php
 Docnet\MATT::expect('Some horrible error')->never()->email('bill@microsoft.com');
