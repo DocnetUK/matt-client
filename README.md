@@ -24,17 +24,6 @@ You can used named targets and groups that have been set up too, so in this exam
 Docnet\MATT::expect('Some other horrible error')->never()->email('support');
 ```
 
-### Namespace ###
-
-The `MATT` class is namespaced, so you can either use the fully qualified as above or 'use' it
-
-```php
-<?php
-use Docnet\MATT;
-//...
-MATT::expect('Some other horrible error')->never()->email('support');
-```
-
 ## Event Names ##
 
 The `expect()` singleton factory method takes an event name/identifier as a parameter.  These are limited to 32 characters and will be truncated.
@@ -56,6 +45,20 @@ OR, one of the following time representations, where N is a number
 - Nm
 - Nh
 - Nd
+
+## Monitors are HOST and DOCNET_APP_ID unique ##
+
+By default, the `MATT` client will include your `hostname` as part of the request and, if defined, the `DOCNET_APP_ID`.
+
+Monitors are unique to host+app_id pairs.
+
+This means a monitor for "Google feed uploaded OK" can run and each client check will be independent of each other.
+
+If you need to override the `hostname`, you can use the `from()` method as follows (but watch overlap with development).
+
+```php
+Docnet\MATT::expect('Clustered cron')->from('cluster')->every('hour')->email('support');
+```
 
 ## Cancellation (stop monitoring) ##
 
