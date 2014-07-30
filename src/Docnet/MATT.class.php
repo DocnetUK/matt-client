@@ -181,8 +181,7 @@ class MATT
             'time' => time(),
             'every' => $this->str_every,
             'email' => $this->str_email,
-            'sms' => $this->str_sms,
-            'cancel' => ('cancel' == $this->str_every)
+            'sms' => $this->str_sms
         );
         $arr_opts = array(
             'ssl' => array(
