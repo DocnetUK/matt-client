@@ -18,11 +18,15 @@ If something should never happen, do this
 Docnet\MATT::expect('Some horrible error')->never()->email('bill@microsoft.com');
 ```
 
+### Named recipients ###
+
 You can used named targets and groups that have been set up too, so in this example 'support' means several people
 
 ```php
 Docnet\MATT::expect('Some other horrible error')->never()->email('support');
 ```
+
+At the time of writing, named recipients must be set up by the author.
 
 ## Event Names ##
 
