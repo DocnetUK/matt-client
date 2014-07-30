@@ -1,8 +1,8 @@
 # PHP Client for MATT notifications #
 
-This is a trivial PHP client (one class) that helps you to monitor success or failure of events.
+This is a trivial PHP client (one class with a fluent interface) that helps you to monitor success or failure of stuff.
 
-One thing that is often overlooked when writing crons and other regular processes is health monitoring.
+One thing that is often overlooked when writing crons and other regular processes is health monitoring.  This usually takes the form of "Oh my god, such-and-such a script has not run successfully for 2 weeks, help!".
 
 ## Getting Started ##
 
