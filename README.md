@@ -1,22 +1,37 @@
 # PHP Client for MATT notifications #
 
+This is a trivial PHP client (one class) that helps you to monitor success or failure of events.
+
+One thing that is often overlooked when writing crons and other regular processes is health monitoring.
+
 ## Getting Started ##
 
 When you need to know if some regular process stops working, do this
 
 ```php
-MATT::expect('My cron finished OK')->every('15m')->sms('07777123456');
+Docnet\MATT::expect('My cron finished OK')->every('15m')->sms('07777123456');
 ```
 
 If something should never happen, do this
 
 ```php
-MATT::expect('Some horrible error')->never()->email('bill@microsoft.com');
+Docnet\MATT::expect('Some horrible error')->never()->email('bill@microsoft.com');
 ```
 
 You can used named targets and groups that have been set up too, so in this example 'support' means several people
 
 ```php
+Docnet\MATT::expect('Some other horrible error')->never()->email('support');
+```
+
+### Namespace ###
+
+The `MATT` class is namespaced, so you can either use the fully qualified as above or 'use' it
+
+```php
+<?php
+use Docnet\MATT;
+//...
 MATT::expect('Some other horrible error')->never()->email('support');
 ```
 
@@ -44,7 +59,7 @@ OR, one of the following time representations, where N is a number
 
 ## Cancellation (stop monitoring) ##
 
-If you need to stop the server monitoring a particular event, use `cancel` like this
+If you need to stop the server monitoring a particular event, use `cancel()` like this
 
 ```php
 MATT::expect('Some other horrible error')->cancel();
