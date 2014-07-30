@@ -167,7 +167,7 @@ class MATT
      */
     public function send()
     {
-        $arr_data = [
+        $arr_data = array(
             'datatype' => 'auto-matt',
             'host' => $this->str_source,
             'app' => defined('DOCNET_APP_ID') ? DOCNET_APP_ID : 'unknown',
@@ -177,21 +177,21 @@ class MATT
             'email' => $this->str_email,
             'sms' => $this->str_sms,
             'cancel' => ('cancel' == $this->str_every)
-        ];
-        $arr_opts = [
-            'ssl' => [
+        );
+        $arr_opts = array(
+            'ssl' => array(
                 'verify_peer' => true,
                 'CN_match' => '*.appspot.com',
                 'disable_compression' => true,
                 // 'cafile' => '/path/to/cafile.pem',
                 // 'ciphers' => 'HIGH:!SSLv2:!SSLv3',
-            ],
-            'http' => [
+            ),
+            'http' => array(
                 'method' => 'POST',
                 'header' => 'Content-type: application/x-www-form-urlencoded',
                 'content' => http_build_query($arr_data)
-            ]
-        ];
+            )
+        );
         $this->bol_sent = TRUE;
 
         // Make the request
