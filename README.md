@@ -56,6 +56,14 @@ OR, one of the following time representations, where N is a number
 - Nh
 - Nd
 
+## Alert Frequency ##
+
+MATT will send you alerts once every skipped interval.
+
+So, a failed cron due to run once per hour will send you alerts once per hour until it runs successfully again.
+
+Watch out - If you ask for an SMS every minute - you'll get one!
+
 ## Monitors are HOST and DOCNET_APP_ID unique ##
 
 By default, the `MATT` client will include your `hostname` as part of the request and, if defined, the `DOCNET_APP_ID`.
