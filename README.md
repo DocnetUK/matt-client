@@ -4,6 +4,10 @@ This is a trivial PHP client (one class with a fluent interface) that helps you 
 
 One thing that is often overlooked when writing crons and other regular processes is health monitoring.  This usually takes the form of "Oh my god, such-and-such a script has not run successfully for 2 weeks, help!".
 
+## Absence of Success ##
+
+One key thing here is that this system looks for the absence of a success message. So, if your cron starts hitting a Fatal error, this will tell you. Regular "log/email" stuff in a script will not even get hit.
+
 ## Getting Started ##
 
 When you need to know if some regular process stops working, do something like this at the end of your script (when you know the job is done to satisfaction)
