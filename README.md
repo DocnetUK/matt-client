@@ -103,10 +103,10 @@ Docnet\MATT::expect('Clustered cron')->from('cluster')->every('hour')->email('su
 ## Cancellation (stop monitoring) ##
 
 If you need to stop the server monitoring a particular event, use `cancel()` like this
-
 ```php
 MATT::expect('Some other horrible error')->cancel();
 ```
+The system will notify current SMS and EMAIL recipients of the cancellation.
 
 ## API calls over HTTPS with PHP Streams ##
 
