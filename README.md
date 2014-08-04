@@ -60,6 +60,24 @@ OR, one of the following time representations, where N is a number
 - Nh
 - Nd
 
+### Changing Intervals ###
+
+If you start off with
+
+```php
+Docnet\MATT::expect('My cron finished OK')->every('5m')->sms('07777123456');
+```
+
+And then decide you want to change the interval, just change the value you are passing to `every()`, like this:
+
+
+```php
+Docnet\MATT::expect('My cron finished OK')->every('15m')->sms('07777123456');
+```
+
+The system will update it's watch interval automatically for you, and send you another confirmation message.
+
+
 ## Alert Frequency ##
 
 MATT will send you alerts once every skipped interval.
