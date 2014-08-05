@@ -70,13 +70,11 @@ Docnet\MATT::expect('My cron finished OK')->every('5m')->sms('07777123456');
 
 And then decide you want to change the interval, just change the value you are passing to `every()`, like this:
 
-
 ```php
 Docnet\MATT::expect('My cron finished OK')->every('15m')->sms('07777123456');
 ```
 
 The system will update it's watch interval automatically for you, and send you another confirmation message.
-
 
 ## Alert Frequency ##
 
@@ -103,9 +101,11 @@ Docnet\MATT::expect('Clustered cron')->from('cluster')->every('hour')->email('su
 ## Cancellation (stop monitoring) ##
 
 If you need to stop the server monitoring a particular event, use `cancel()` like this
+
 ```php
 MATT::expect('Some other horrible error')->cancel();
 ```
+
 The system will notify current SMS and EMAIL recipients of the cancellation.
 
 ## API calls over HTTPS with PHP Streams ##
