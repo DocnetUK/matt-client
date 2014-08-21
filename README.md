@@ -22,6 +22,12 @@ If something should never happen, do this (perhaps in the main 'catch' block)
 Docnet\MATT::expect('Some horrible error')->never()->email('bill@microsoft.com');
 ```
 
+### Install with Composer ###
+
+Here's the require line for Composer users...
+
+`"docnet/matt-client": "dev-master"`
+
 ### No set-up required ###
 
 You don't need to go and set up monitors in a web interface or anything. The first time you make a call (as above) the server will start watching.
