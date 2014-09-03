@@ -153,7 +153,7 @@ class MATT
     }
 
     /**
-     * Who should we try and tell via email?
+     * Who should we try and tell via SMS?
      *
      * @param $str_recipient
      * @return $this
