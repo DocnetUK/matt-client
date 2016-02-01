@@ -77,6 +77,13 @@ class MATT
     private $str_every = NULL;
 
     /**
+     * Suppress sending initial now watching message
+     *
+     * @var bool
+     */
+    private $bol_suppress_watch_message = false;
+
+    /**
      * Set up the event and hostname on construction.
      *
      * Objects should be crated by the expect() factory method
@@ -181,6 +188,18 @@ class MATT
     }
 
     /**
+     * Should we suppress the initial message telling us that the watch has been created
+     *
+     * @param $bol_suppress
+     * @return $this
+     */
+    public function suppress_watch_message($bol_suppress)
+    {
+        $this->bol_suppress_watch_message = $bol_suppress;
+        return $this;
+    }
+
+    /**
      * Send the data off to MattDaemon
      *
      * @todo Work on CA file location
@@ -197,7 +216,8 @@ class MATT
             'time' => time(),
             'every' => $this->str_every,
             'email' => $this->str_email,
-            'sms' => $this->str_sms
+            'sms' => $this->str_sms,
+            'suppress_watch' => $this->bol_suppress_watch_message,
         );
         $arr_opts = array(
             'ssl' => array(
