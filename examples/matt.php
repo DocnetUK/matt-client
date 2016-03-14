@@ -3,7 +3,7 @@
  * Examples for MATT client
  */
 
-require(dirname(__FILE__) . '/../src/Docnet/MATT.class.php');
+require(dirname(__FILE__) . '/../src/Docnet/MATT.php');
 
 // This should happen once per day
 Docnet\MATT::expect('Google upload OK [test]')->every('day');
