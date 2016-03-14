@@ -39,42 +39,47 @@ class MATT
      *
      * @var bool
      */
-    private $bol_sent = FALSE;
+    protected $bol_sent = FALSE;
 
     /**
      * What event are we monitoring?
      *
      * @var string
      */
-    private $str_event = NULL;
+    protected $str_event = NULL;
 
     /**
      * What is the source of the event?
      *
      * @var string
      */
-    private $str_source = NULL;
+    protected $str_source = NULL;
 
     /**
      * Who should we tell via email when something goes wrong?
      *
      * @var string
      */
-    private $str_email = NULL;
+    protected $str_email = NULL;
 
     /**
      * Who should we tell via SMS when something goes wrong?
      *
      * @var string
      */
-    private $str_sms = NULL;
+    protected $str_sms = NULL;
 
     /**
      * Expected Interval
      *
      * @var null
      */
-    private $str_every = NULL;
+    protected $str_every = NULL;
+
+    /**
+     * @var string
+     */
+    protected $str_app = NULL;
 
     /**
      * Set up the event and hostname on construction.
@@ -87,6 +92,7 @@ class MATT
     {
         $this->str_event = $str_event;
         $this->str_source = gethostname();
+        $this->str_app = defined('DOCNET_APP_ID') ? DOCNET_APP_ID : self::NO_APP_ID;
     }
 
     /**
@@ -95,7 +101,7 @@ class MATT
      * Don't create too many MATTs, or we'll be overrun!
      *
      * @param String $str_event Event UID (max 32 characters)
-     * @return MATT
+     * @return static
      */
     public static function expect($str_event)
     {
@@ -103,7 +109,7 @@ class MATT
             trigger_error(__METHOD__ . '() truncating event string to 32 characters', E_USER_WARNING);
             $str_event = substr($str_event, 0, 32);
         }
-        return new self($str_event);
+        return new static($str_event);
     }
 
     /**
@@ -192,7 +198,7 @@ class MATT
         $arr_data = array(
             'datatype' => 'auto-matt',
             'host' => $this->str_source,
-            'app' => defined('DOCNET_APP_ID') ? DOCNET_APP_ID : self::NO_APP_ID,
+            'app' => $this->str_app,
             'event' => $this->str_event,
             'time' => time(),
             'every' => $this->str_every,
@@ -218,6 +224,16 @@ class MATT
         // Make the request
         $str_response = @file_get_contents('https://matt-daemon-eu.appspot.com/expect', FALSE, stream_context_create($arr_opts));
         return $this->process_response($str_response);
+    }
+
+    /**
+     * Sets the APP_ID for the current message
+     * @param string $str_app
+     * @return $this
+     */
+    public function setApp($str_app) {
+        $this->str_app = $str_app;
+        return $this;
     }
 
     /**
