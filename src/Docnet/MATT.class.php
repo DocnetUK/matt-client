@@ -83,7 +83,7 @@ class MATT
      *
      * @param $str_event
      */
-    private function __construct($str_event)
+    protected function __construct($str_event)
     {
         $this->str_event = $str_event;
         $this->str_source = gethostname();
@@ -221,12 +221,62 @@ class MATT
     }
 
     /**
+     * Set a private var from outside scope
+     */
+    protected function set_source($str_source) {
+       $this->str_source = $str_source;
+    }
+    /**
+     * Set a private var from outside scope
+     */
+    protected function set_event($str_event) {
+       $this->str_event = $str_event;
+    }
+    /**
+     * Get a private var from outside scope
+     */
+    protected function get_source() {
+       return $this->str_source;
+    }
+    /**
+     * Get a private var from outside scope
+     */
+    protected function get_event() {
+       return $this->str_event;
+    }
+    /**
+     * Get a private var from outside scope
+     */
+    protected function get_every() {
+       return $this->str_every;
+    }
+    /**
+     * Get a private var from outside scope
+     */
+    protected function get_email() {
+       return $this->str_email;
+    }
+    /**
+     * Get a private var from outside scope
+     */
+    protected function get_sms() {
+       return $this->str_sms;
+    }
+
+    /**
+     * Private override
+     */
+    protected function set_sent() {
+       $this->bol_sent = true;
+    }
+
+    /**
      * Process any response data from Matt Daemon
      *
      * @param $str_response
      * @return bool
      */
-    private function process_response($str_response)
+    protected function process_response($str_response)
     {
         if (FALSE === $str_response) {
             trigger_error(__METHOD__ . '() comms error', E_USER_WARNING);
