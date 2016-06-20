@@ -193,7 +193,7 @@ class MATT
      * @param $bol_suppress
      * @return $this
      */
-    public function suppress_watch_message($bol_suppress)
+    public function suppress_watch_message($bol_suppress = true)
     {
         $this->bol_suppress_watch_message = $bol_suppress;
         return $this;
