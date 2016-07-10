@@ -35,6 +35,13 @@ class MATT
     const CANCEL = 'cancel';
 
     /**
+     * Appspot URL to post our MATTs to
+     *
+     * @var string
+     */
+    const MATT_URL = 'https://matt-daemon-eu.appspot.com/expect';
+
+    /**
      * Sent yet? We only want to do this once!
      *
      * @var bool
@@ -236,7 +243,23 @@ class MATT
         $this->bol_sent = TRUE;
 
         // Make the request
-        $str_response = @file_get_contents('https://matt-daemon-eu.appspot.com/expect', FALSE, stream_context_create($arr_opts));
+        $str_response = @file_get_contents(self::MATT_URL, FALSE, stream_context_create($arr_opts));
+
+        // fallback to curl if it's available
+        if (FALSE === $str_response && function_exists('curl_init')) {
+            $res_curl = curl_init();
+            curl_setopt_array($res_curl, array(
+               CURLOPT_URL => self::MATT_URL,
+               CURLOPT_FRESH_CONNECT => TRUE,
+               CURLOPT_HEADER => FALSE,
+               CURLOPT_POST => TRUE,
+               CURLOPT_SSL_VERIFYHOST => FALSE,
+               CURLOPT_RETURNTRANSFER => TRUE,
+               CURLOPT_POSTFIELDS => $arr_data
+            ));
+            $str_response = curl_exec($res_curl);
+        }
+
         return $this->process_response($str_response);
     }
 
