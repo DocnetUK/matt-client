@@ -34,6 +34,8 @@ class MATT
     const NO_APP_ID = 'no-app-id';
     const CANCEL = 'cancel';
 
+    private static $bol_verify_peer = true;
+
     /**
      * Sent yet? We only want to do this once!
      *
@@ -93,7 +95,12 @@ class MATT
     private function __construct($str_event)
     {
         $this->str_event = $str_event;
-        $this->str_source = gethostname();
+	$this->str_source = strtolower(trim(PHP_VERSION_ID > 50300 ? gethostname() : `hostname`));
+
+    }
+
+    public static function set_verify_peer($bol_verify_peer) {
+        self::$bol_verify_peer = (bool)$bol_verify_peer;
     }
 
     /**
@@ -233,10 +240,35 @@ class MATT
                 'content' => http_build_query($arr_data)
             )
         );
-        $this->bol_sent = TRUE;
 
+        if (self::$bol_verify_peer) {
+            $arr_opts['ssl']['verify_peer'] = true;
+            $arr_opts['ssl']['CN_match'] = '*.appspot.com';
+        }
+
+
+        $this->bol_sent = TRUE;
         // Make the request
         $str_response = @file_get_contents('https://matt-daemon-eu.appspot.com/expect', FALSE, stream_context_create($arr_opts));
+
+        // if fail try curl.
+        if (FALSE === $str_response && extension_loaded ('curl')) {
+            $res_curl = curl_init();
+            curl_setopt($res_curl, CURLOPT_URL, 'https://matt-daemon-eu.appspot.com/expect');
+            curl_setopt($res_curl, CURLOPT_FRESH_CONNECT, TRUE);
+            curl_setopt($res_curl, CURLOPT_HEADER, FALSE);
+            curl_setopt($res_curl, CURLOPT_POST, TRUE);
+
+            if (self::$bol_verify_peer) {
+                curl_setopt($res_curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            }
+
+            curl_setopt($res_curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($res_curl, CURLOPT_POSTFIELDS, $arr_data);
+            // Execute request
+            $str_response = curl_exec($res_curl);
+        }
+
         return $this->process_response($str_response);
     }
 
