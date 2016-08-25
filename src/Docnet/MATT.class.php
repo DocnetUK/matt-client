@@ -34,14 +34,20 @@ class MATT
     const NO_APP_ID = 'no-app-id';
     const CANCEL = 'cancel';
 
-    private static $bol_verify_peer = true;
-
     /**
      * Sent yet? We only want to do this once!
      *
      * @var bool
      */
     private $bol_sent = FALSE;
+
+    /**
+     * Force peer verification for SSL -
+     * useful to disable if your server has out of date CA certs
+     *
+     * @var bool
+     */
+    private static $bol_verify_peer = true;
 
     /**
      * What event are we monitoring?
@@ -99,6 +105,11 @@ class MATT
 
     }
 
+    /**
+     * Allow the toggling of this parameter
+     *
+     * @param $bol_verify_peer
+     */
     public static function set_verify_peer($bol_verify_peer) {
         self::$bol_verify_peer = (bool)$bol_verify_peer;
     }
@@ -228,8 +239,6 @@ class MATT
         );
         $arr_opts = array(
             'ssl' => array(
-                'verify_peer' => true,
-                'CN_match' => '*.appspot.com',
                 'disable_compression' => true,
                 // 'cafile' => '/path/to/cafile.pem',
                 // 'ciphers' => 'HIGH:!SSLv2:!SSLv3',
@@ -241,6 +250,8 @@ class MATT
             )
         );
 
+
+        // Only verify peer if we haven't disabled it.
         if (self::$bol_verify_peer) {
             $arr_opts['ssl']['verify_peer'] = true;
             $arr_opts['ssl']['CN_match'] = '*.appspot.com';
@@ -259,6 +270,7 @@ class MATT
             curl_setopt($res_curl, CURLOPT_HEADER, FALSE);
             curl_setopt($res_curl, CURLOPT_POST, TRUE);
 
+            // Only verify peer if we haven't disabled it.
             if (self::$bol_verify_peer) {
                 curl_setopt($res_curl, CURLOPT_SSL_VERIFYHOST, FALSE);
             }
