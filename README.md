@@ -111,14 +111,24 @@ If you need to stop the server monitoring a particular event, use `cancel()` lik
 ```php
 MATT::expect('Some other horrible error')->cancel();
 ```
-
 The system will notify current SMS and EMAIL recipients of the cancellation.
+
+## Silent watching/cancelling ##
+
+If you need to suppress the "Now watching..." and "Stopped watching..." messages, use `suppress_watch_message()` like this
+
+```php
+Docnet\MATT::expect('Clustered cron')->from('cluster')->every('hour')->email('support')->suppress_watch_message();
+
+Docnet\MATT::expect('Clustered cron')->cancel()->suppress_watch_message();
+```
 
 ## API calls over HTTPS with PHP Streams ##
 
 As we don't know what sort of platforms we are going to be deployed on to, we don't use Curl in case it's not installed.
 
-So, API calls are made over HTTPS using PHP native Streams and associated context options.
+So, API calls are made over HTTPS using PHP native Streams and associated context options. If HTTPS using PHP native Streams fails 
+and Curl is available, the API call will be attempted via Curl
 
 API calls are made on `__destruct()` of each `MATT` instance. If the call fails, an `E_USER_WARNING` triggered.
 

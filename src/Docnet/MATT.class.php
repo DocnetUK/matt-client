@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Docnet
+ * Copyright 2016 Docnet
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,17 @@ class MATT
      */
     const NO_APP_ID = 'no-app-id';
     const CANCEL = 'cancel';
+    const MATT_DAEMON_URL = 'https://matt-daemon-eu.appspot.com/expect';
+
+    /**
+     * Force peer verification for SSL -
+     * useful to disable if your server has out of date CA certs
+     *
+     * STATIC for a reason - All instances set during the thread of execution need to have the specified behavior.
+     *
+     * @var bool
+     */
+    private static $bol_verify_peer = true;
 
     /**
      * Sent yet? We only want to do this once!
@@ -94,6 +105,16 @@ class MATT
     {
         $this->str_event = $str_event;
         $this->str_source = gethostname();
+    }
+
+    /**
+     * Allow the toggling of this parameter
+     * Static so it can be set in the class.
+     *
+     * @param bool $bol_verify_peer
+     */
+    public static function set_verify_peer($bol_verify_peer = true) {
+        self::$bol_verify_peer = (bool)$bol_verify_peer;
     }
 
     /**
@@ -221,8 +242,6 @@ class MATT
         );
         $arr_opts = array(
             'ssl' => array(
-                'verify_peer' => true,
-                'CN_match' => '*.appspot.com',
                 'disable_compression' => true,
                 // 'cafile' => '/path/to/cafile.pem',
                 // 'ciphers' => 'HIGH:!SSLv2:!SSLv3',
@@ -233,10 +252,32 @@ class MATT
                 'content' => http_build_query($arr_data)
             )
         );
-        $this->bol_sent = TRUE;
 
+        // Only verify peer if we haven't disabled it.
+        if (self::$bol_verify_peer) {
+            $arr_opts['ssl']['verify_peer'] = true;
+            $arr_opts['ssl']['CN_match'] = '*.appspot.com';
+        }
+
+        $this->bol_sent = TRUE;
         // Make the request
-        $str_response = @file_get_contents('https://matt-daemon-eu.appspot.com/expect', FALSE, stream_context_create($arr_opts));
+        $str_response = @file_get_contents(self::MATT_DAEMON_URL, FALSE, stream_context_create($arr_opts));
+
+        // if fail try curl.
+        if (FALSE === $str_response && extension_loaded ('curl')) {
+            $res_curl = curl_init();
+            curl_setopt($res_curl, CURLOPT_URL, self::MATT_DAEMON_URL);
+            curl_setopt($res_curl, CURLOPT_FRESH_CONNECT, TRUE);
+            curl_setopt($res_curl, CURLOPT_HEADER, FALSE);
+            curl_setopt($res_curl, CURLOPT_POST, TRUE);
+            // Only verify peer if we haven't disabled it.
+            curl_setopt($res_curl, CURLOPT_SSL_VERIFYHOST, self::$bol_verify_peer);
+            curl_setopt($res_curl, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($res_curl, CURLOPT_POSTFIELDS, $arr_data);
+            // Execute request
+            $str_response = curl_exec($res_curl);
+        }
+
         return $this->process_response($str_response);
     }
 
