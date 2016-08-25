@@ -1,5 +1,5 @@
 {
-    "name": "docnet/matt-client",
+    "name": "ylamlum-docnet/matt-client",
     "type": "library",
     "description": "PHP Client for MATT (Monitor All The Things) notifications",
     "keywords": ["docnet", "matt", "notifications"],
