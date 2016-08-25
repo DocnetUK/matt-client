@@ -101,8 +101,7 @@ class MATT
     private function __construct($str_event)
     {
         $this->str_event = $str_event;
-	$this->str_source = strtolower(trim(PHP_VERSION_ID > 50300 ? gethostname() : `hostname`));
-
+	    $this->str_source = gethostname();
     }
 
     /**
