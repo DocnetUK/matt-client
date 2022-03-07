@@ -81,6 +81,13 @@ class MATT
     private $str_sms = NULL;
 
     /**
+     * Who should we tell via Slack Channel when something goes wrong?
+     *
+     * @var string
+     */
+    private $str_slack = NULL;
+
+    /**
      * Expected Interval
      *
      * @var null
@@ -209,6 +216,18 @@ class MATT
     }
 
     /**
+     * Who should we try and tell via Slack Channel?
+     *
+     * @param $str_channel
+     * @return $this
+     */
+    public function slack($str_channel)
+    {
+        $this->str_slack = $str_channel;
+        return $this;
+    }
+
+    /**
      * Should we suppress the initial message telling us that the watch has been created
      *
      * @param $bol_suppress
@@ -238,6 +257,7 @@ class MATT
             'every' => $this->str_every,
             'email' => $this->str_email,
             'sms' => $this->str_sms,
+            'slack' => $this->str_slack,
             'suppress_watch' => $this->bol_suppress_watch_message,
         );
         $arr_opts = array(
